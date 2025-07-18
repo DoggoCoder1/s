@@ -10,11 +10,41 @@
 </form>
 
 <script>
-  await fetch('/api/register', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ "Hello" }),
-});
+  const form = document.getElementById('msg-form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault(); // Prevent page reload
+
+    const content = document.getElementById('msg-input').value.trim();
+    if (!content) {
+      alert('Please enter a message');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/server', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ content }),
+      });
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        alert('Error: ' + (errorData.error || 'Unknown error'));
+        return;
+      }
+
+      const data = await res.json();
+      console.log('Saved:', data);
+      alert('Message sent successfully!');
+
+      // Clear the input
+      document.getElementById('msg-input').value = '';
+    } catch (err) {
+      console.error('Fetch error:', err);
+      alert('Failed to send message');
+    }
+  });
 </script>
 
     </body>
