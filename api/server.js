@@ -6,21 +6,38 @@ const pool = new Pool({
 });
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    res.status(405).json({ error: 'Method Not Allowed' });
-    return;
+  if (req.method === 'POST') {
+    const { x, y, color } = req.body;
+
+    if (
+      typeof x !== 'number' ||
+      typeof y !== 'number' ||
+      typeof color !== 'string'
+    ) {
+      res.status(200).end();
+      return;
+    }
+
+    try {
+      await pool.query(
+        `INSERT INTO pixels (x, y, color)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (x, y) DO UPDATE SET color = EXCLUDED.color`,
+        [x, y, color]
+      );
+      res.status(200).json({ message: 'Pixel saved' });
+    } catch {
+      res.status(200).end();
+    }
+
+  } else if (req.method === 'GET') {
+    try {
+      const result = await pool.query('SELECT x, y, color FROM pixels');
+      res.status(200).json(result.rows);
+    } catch {
+      res.status(200).json([]);
+    }
+  } else {
+    res.status(200).end();
   }
-
-  const { content } = req.body;
-
-  if (!content) {
-    res.status(400).json({ error: 'Missing content' });
-    return;
-  }
-
-  const result = await pool.query(
-    'INSERT INTO messages (content) VALUES ($1) RETURNING *',
-    [content]
-  );
-  res.status(200).json({ message: 'Saved', data: result.rows[0] });
 }
