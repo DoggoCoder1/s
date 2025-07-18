@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Tarzaui</title>
+    </head>
+    <body>
+        <form id="msg-form">
+  <input type="text" id="msg-input" placeholder="Your message" />
+  <button type="submit">Send</button>
+</form>
+
+<script>
+  const form = document.getElementById('msg-form');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const content = document.getElementById('msg-input').value;
+
+    const res = await fetch('/api/server', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content }),
+    });
+
+    const data = await res.json();
+    console.log('Saved:', data);
+  });
+</script>
+
+    </body>
+</html>
