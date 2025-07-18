@@ -10,22 +10,11 @@
 </form>
 
 <script>
-  const form = document.getElementById('msg-form');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-
-    const content = document.getElementById('msg-input').value;
-
-    const res = await fetch('/api/server', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content }),
-    });
-
-    const data = await res.json();
-    console.log('Saved:', data);
-  });
+  await fetch('/api/register', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ "Hello" }),
+});
 </script>
 
     </body>

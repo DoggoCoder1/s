@@ -7,27 +7,23 @@ const pool = new Pool({
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).end('Method Not Allowed');
+    return res.status(405).json({ error: 'Method Not Allowed' });
   }
 
-  // Log the raw body for debugging:
-  console.log('Request body:', req.body);
+  const { content } = req.body;
 
-  // Check for content:
-  const { content } = req.body || {};
-
-  if (!content || typeof content !== 'string' || content.trim() === '') {
+  if (!content) {
     return res.status(400).json({ error: 'Missing content' });
   }
 
   try {
     const result = await pool.query(
       'INSERT INTO messages (content) VALUES ($1) RETURNING *',
-      [content.trim()]
+      [content]
     );
     return res.status(200).json({ message: 'Saved', data: result.rows[0] });
-  } catch (err) {
-    console.error('Database error:', err);
+  } catch (error) {
+    console.error(error);
     return res.status(500).json({ error: 'Database error' });
   }
 }
