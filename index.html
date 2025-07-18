@@ -27,22 +27,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ content }),
       });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        alert('Error: ' + (errorData.error || 'Unknown error'));
-        return;
-      }
-
-      const data = await res.json();
-      console.log('Saved:', data);
-      alert('Message sent successfully!');
-
-      // Clear the input
       document.getElementById('msg-input').value = '';
     } catch (err) {
-      console.error('Fetch error:', err);
-      alert('Failed to send message');
+      console.error('Error:', err);
     }
   });
 </script>
