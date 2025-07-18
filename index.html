@@ -52,16 +52,18 @@
 
     // Send pixel data to backend
     async function sendPixel(x, y, color) {
-      try {
-        await fetch('/api/pixels', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ x, y, color }),
-        });
-      } catch (e) {
-        // fail silently
-      }
-    }
+  try {
+    const res = await fetch('/api/pixels', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ x, y, color }),
+    });
+    if (!res.ok) console.error('Failed to save pixel');
+  } catch (e) {
+    console.error('Error saving pixel:', e);
+  }
+}
+
 
     // Load all pixels from backend
     async function loadPixels() {
