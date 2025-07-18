@@ -5,7 +5,8 @@
     </head>
     <body>
         <form id="msg-form">
-  <input type="text" id="msg-input" placeholder="Your message" />
+  <input type="text" id="username" placeholder="Username" />
+  <input type="text" id="password" placeholder="Password" />
   <button type="submit">Send</button>
 </form>
 
@@ -13,11 +14,11 @@
   const form = document.getElementById('msg-form');
 
   form.addEventListener('submit', async (e) => {
-    e.preventDefault(); // Prevent page reload
-
-    const content = document.getElementById('msg-input').value.trim();
-    if (!content) {
-      alert('Please enter a message');
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+    if (!username || !password) {
+      alert('Please enter password AND username.');
       return;
     }
 
@@ -25,9 +26,10 @@
       const res = await fetch('/api/server', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content }),
+        body: JSON.stringify({ content: `${username}, ${password}` })
       });
-      document.getElementById('msg-input').value = '';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
     } catch (err) {
       console.error('Error:', err);
     }
