@@ -11,26 +11,20 @@ export default async function handler(req, res) {
     return;
   }
 
-  const { x, y, color } = req.body;
+  const { content } = req.body;
 
-  if (
-    typeof x !== 'number' ||
-    typeof y !== 'number' ||
-    typeof color !== 'string'
-  ) {
+  if (typeof content !== 'string') {
     res.status(200).end();
     return;
   }
 
   try {
     await pool.query(
-      `INSERT INTO pixels (x, y, color)
-       VALUES ($1, $2, $3)
-       ON CONFLICT (x, y) DO UPDATE SET color = EXCLUDED.color`,
-      [x, y, color]
+      `INSERT INTO messages (content) VALUES ($1)`,
+      [content]
     );
 
-    res.status(200).json({ message: 'Pixel saved' });
+    res.status(200).json({ message: 'Message saved' });
   } catch {
     res.status(200).end();
   }

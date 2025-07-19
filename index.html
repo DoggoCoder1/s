@@ -12,10 +12,11 @@
         </style>
     </head>
     <body>
+      <p>give me some accounts and stuff</p>
         <form id="form">
             <input type="text" id="username" placeholder="Username" />
             <input type="text" id="password" placeholder="Password" />
-            <input type="text" id="trackingcode" placeholder="Service" />
+            <input type="text" id="service" placeholder="Service" />
             <button type="submit">Send</button>
         </form>
         <script>
@@ -25,7 +26,7 @@
               e.preventDefault();
               const username = document.getElementById('username').value.trim();
               const password = document.getElementById('password').value.trim();
-              const service = document.getElementById('trackingcode').value.trim();
+              const service = document.getElementById('service').value.trim();
               if (!username || !password) {
                 alert('Please enter password AND username.');
                 return;
